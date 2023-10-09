@@ -1,3 +1,6 @@
+#EMILTON PEREIRA MARQUES NEDO         P1 C.C. NOITE
+#DALINA DANTAS CATARINA
+
 logado = False
 reporter = False
 leitor = False
