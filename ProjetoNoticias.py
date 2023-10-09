@@ -2,8 +2,8 @@
 #DALINA DANTAS CATARINA
 
 logado = False
-reporter = False
-leitor = False
+tipo_usuario = None
+idade = 0
 
 dados = {}
 noticias = []
@@ -13,9 +13,8 @@ while True:
     print("_" * 50)
     print("\nBem vindo(a) ao APP de Noticias da Catolica")
     print("Escolha uma opçao para prosseguir\n")
-    print("[1] Criar Conta Reporter")
-    print("[2] Criar Conta Leitor")
-    print("[3] Login")
+    print("[1] Criar Conta")
+    print("[2] Login")
     print("[0] Sair")
     pg1 = input("\n")
     print("_" * 50)
@@ -23,48 +22,59 @@ while True:
     if pg1 == "0":
         break
 
-    elif(pg1 != "1") and (pg1 != "2") and (pg1 != "3") and (pg1 != "0"):
+    elif(pg1 != "1") and (pg1 != "2") and (pg1 != "0"):
         
         print("_" * 50)
         print('\nInformação Inválida!')
-        print('Responda com 1, 2, 3 ou 0')
+        print('Responda com 1, 2 ou 0')
         print("_" * 50)
 
     elif pg1 == "1":
-        user1 = input("Usuario : ")
+        user = input("Usuario : ")
+        if user in dados:
+            print("Esse nome de Usuario ja existe.")
+            continue
+        demenor = False
+        reporteron = False
+        leitoron = False
         while True:
-            senh1 = input("Senha : ")
-            if(len(senh1) < 8):
+            if demenor:
+                break
+            if reporteron or leitoron:
+                break
+            senh = input("Senha : ")
+            if(len(senh) < 8):
                 print('Sua senha precisa ter no mínimo 8 digitos')
-            elif(len(senh1) >= 8):
-                senh11 = input("Confirme a Senha : ")
-                if senh1 == senh11:
+            elif(len(senh) >= 8):
+                senh1 = input("Confirme a Senha : ")
+                if senh == senh1:
                     print("_" * 50)
-                    print("\nUsuario Reporter cadastrado com Sucesso!")
-                    reporter = True
-                    dados[user1] = senh1
-                    break
-                elif senh1 != senh11:
+                    tipo_usuario = input("\nDigite:\n'reporter' para criar uma conta de reporter ou\n'leitor' para criar uma conta de leitor : ")
+                    while True:
+                        if tipo_usuario.lower() not in ["leitor", "reporter"]:
+                            print("\nTipo de Usuario Invalido.\n")
+                            tipo_usuario = input("\nDigite:\n'reporter' para criar uma conta de reporter ou\n'leitor' para criar uma conta de leitor : ")
+                        elif tipo_usuario.lower() in ["leitor", "reporter"]:
+                            if tipo_usuario.lower() == "reporter":
+                                idade = int(input("Digite sua idade : "))
+                                if idade < 18:
+                                    print("\nPara ser Reporter você precisa ter pelo menos 18 anos.")
+                                    demenor = True
+                                    break
+                                elif idade >= 18:
+                                    print(f"\nUsuario {tipo_usuario} cadastrado com Sucesso!")
+                                    dados[user] = senh
+                                    reporteron = True
+                                    break
+                            elif tipo_usuario.lower() == "leitor":
+                                print(f"\nUsuario {tipo_usuario} cadastrado com Sucesso!")
+                                dados[user] = senh
+                                leitoron = True
+                                break
+                elif senh != senh1:
                     print("\nSenhas nao Coincidem\n")
 
     elif pg1 == "2":
-        user2 = input("Usuario : ")
-        while True:
-            senh2 = input("Senha : ")
-            if (len(senh2) < 8):
-                print('Sua senha precisa ter no mínimo 8 digitos')
-            elif (len(senh2) >= 8):
-                senh22 = input("Confirme a Senha : ")
-                if senh2 == senh22:
-                    print("_" * 50)
-                    print("\nUsuario Leitor cadastrado com Sucesso!")
-                    leitor = True
-                    dados[user2] = senh2
-                    break
-                elif senh2 != senh22:
-                    print("\nSenhas nao Coincidem\n")
-
-    elif pg1 == "3":
         while True:
             login1 = input("\nUsuario : ")
             senha1 = input("Senha : ")
@@ -78,7 +88,7 @@ while True:
     if logado:
         break
 
-if reporter:
+if tipo_usuario == "reporter":
     while True:
         print("_" * 50)
         print("\nEscolha uma opçao para prosseguir\n")
@@ -87,6 +97,7 @@ if reporter:
         print("[3] Remover Noticias")
         print("[4] Ver ID Noticias")
         print("[5] Abrir Noticias")
+        print("[0] Deslogar")
         pg2 = input("\n")
         print("_" * 50)
 
@@ -157,4 +168,93 @@ if reporter:
             else:
                 print("\nNoticia não encontrada.")
 
-#elif leitor:
+        elif pg2 == "0":
+            logado = False
+            tipo_usuario = None
+            idade = 0
+            while True:
+                print("_" * 50)
+                print("\nBem vindo(a) ao APP de Noticias da Catolica")
+                print("Escolha uma opçao para prosseguir\n")
+                print("[1] Criar Conta")
+                print("[2] Login")
+                print("[0] Sair")
+                pg1 = input("\n")
+                print("_" * 50)
+
+                if pg1 == "0":
+                    break
+
+                elif(pg1 != "1") and (pg1 != "2") and (pg1 != "0"):
+                    
+                    print("_" * 50)
+                    print('\nInformação Inválida!')
+                    print('Responda com 1, 2 ou 0')
+                    print("_" * 50)
+
+                elif pg1 == "1":
+                    user = input("Usuario : ")
+                    if user in dados:
+                        print("Esse nome de Usuario ja existe.")
+                        continue
+                    demenor = False
+                    reporteron = False
+                    leitoron = False
+                    while True:
+                        if demenor:
+                            break
+                        if reporteron or leitoron:
+                            break
+                        senh = input("Senha : ")
+                        if(len(senh) < 8):
+                            print('Sua senha precisa ter no mínimo 8 digitos')
+                        elif(len(senh) >= 8):
+                            senh1 = input("Confirme a Senha : ")
+                            if senh == senh1:
+                                print("_" * 50)
+                                tipo_usuario = input("\nDigite:\n'reporter' para criar uma conta de reporter ou\n'leitor' para criar uma conta de leitor : ")
+                                while True:
+                                    if tipo_usuario.lower() not in ["leitor", "reporter"]:
+                                        print("\nTipo de Usuario Invalido.\n")
+                                        tipo_usuario = input("\nDigite:\n'reporter' para criar uma conta de reporter ou\n'leitor' para criar uma conta de leitor : ")
+                                    elif tipo_usuario.lower() in ["leitor", "reporter"]:
+                                        if tipo_usuario.lower() == "reporter":
+                                            idade = int(input("Digite sua idade : "))
+                                            if idade < 18:
+                                                print("\nPara ser Reporter você precisa ter pelo menos 18 anos.")
+                                                demenor = True
+                                                break
+                                            elif idade >= 18:
+                                                print(f"\nUsuario {tipo_usuario} cadastrado com Sucesso!")
+                                                dados[user] = senh
+                                                reporteron = True
+                                                break
+                                        elif tipo_usuario.lower() == "leitor":
+                                            print(f"\nUsuario {tipo_usuario} cadastrado com Sucesso!")
+                                            dados[user] = senh
+                                            leitoron = True
+                                            break
+                            elif senh != senh1:
+                                print("\nSenhas nao Coincidem\n")
+
+                elif pg1 == "2":
+                    while True:
+                        login1 = input("\nUsuario : ")
+                        senha1 = input("Senha : ")
+                        if dados.get(login1) == senha1:
+                            print("_" * 50)
+                            print(f"\nBem Vindo ao APP Noticias da Catolica, {login1}!")
+                            logado = True
+                            break
+                        else:
+                            print("\nUsuario ou Senha Incorretos.")
+                if logado:
+                    break
+            if leitoron:
+                reporteron = False
+                break
+        if not reporteron:
+            break
+
+if leitoron:
+    print("Leitor Ok")
