@@ -15,7 +15,7 @@ def usuarioInput(valor):
 def criarConta():
     global tipo_usuario
     while True:
-        user = usuarioInput("Usuario : ")
+        user = usuarioInput("\nUsuario : ")
         if user in dados:
             print("\nEsse nome de Usuario ja existe.\n")
             continue
@@ -214,12 +214,14 @@ def leitorMenu():
 def main():
     global tipo_usuario
     while True:
+        print("_" *50)
         print("\nBem vindo(a) ao APP de Noticias da Catolica")
         print("Escolha uma opçao para prosseguir\n")
         print("[1] Criar Conta")
         print("[2] Login")
         print("[0] Sair")
         pgmenu = usuarioInput("\n")
+        print("_" *50)
         if pgmenu == "0":
             break
         elif pgmenu == "1":
