@@ -9,36 +9,33 @@ dados = {}
 noticias = []
 id = 0
 
-def usuarioInput(valor):
-    return input(valor)
-
 def criarConta():
     global tipo_usuario
     while True:
-        user = usuarioInput("\nUsuario : ")
+        user = input("\nUsuario : ")
         if user in dados:
             print("\nEsse nome de Usuario ja existe.\n")
             continue
-        senh = usuarioInput("Senha : ")
+        senh = input("Senha : ")
         if len(senh) < 8:
             print('\nSua senha precisa ter no mínimo 8 digitos\n')
             continue
-        senh1 = usuarioInput("Confirme a Senha : ")
+        senh1 = input("Confirme a Senha : ")
         if senh != senh1:
             print("\nSenhas nao Coincidem\n")
             continue
-        tipo_usuario = usuarioInput("\nDigite:\nR para criar uma conta de reporter ou\nL para criar uma conta de leitor : ")
+        tipo_usuario = input("\nDigite:\nR para criar uma conta de reporter ou\nL para criar uma conta de leitor : ")
         if tipo_usuario.lower() not in ["l", "r"]:
             print("\nTipo de Usuario Invalido.\n")
             continue
 
         if tipo_usuario.lower() == "r":
-            idade = int(usuarioInput("\nDigite sua idade : "))
+            idade = int(input("\nDigite sua idade : "))
             if idade < 18:
                 print("\nPara ser Reporter você precisa ter pelo menos 18 anos.\n")
                 main()
 
-        print(f"\nUsuario {tipo_usuario} cadastrado com Sucesso!")
+        print(f"\nUsuario {'Reporter' if tipo_usuario == 'r' else 'Leitor'} cadastrado com Sucesso!")
         dados[user] = {'senha': senh, 'tipo': tipo_usuario}
         return tipo_usuario
 
@@ -48,8 +45,8 @@ def login():
         global tipo_usuario
         #while True:   (Fiz uma coisa de 3 tentativas)
         tent -= 1
-        login1 = usuarioInput("\nUsuario : ")
-        senha1 = usuarioInput("Senha : ")
+        login1 = input("\nUsuario : ")
+        senha1 = input("Senha : ")
         if dados.get(login1) and dados.get(login1)['senha'] == senha1:
             print(f"\nBem Vindo ao APP Noticias da Catolica, {login1}!")
             tipo_usuario = dados.get(login1)['tipo']
@@ -74,7 +71,7 @@ def reporterMenu():
         print("[4] Ver ID Noticias")
         print("[5] Abrir Noticias")
         print("[0] Deslogar")
-        pgreporter = usuarioInput("\n")
+        pgreporter = input("\n")
         print("_" *50)
         if pgreporter == "0":
             main()
@@ -100,7 +97,7 @@ def reporterMenu():
                     break
             
             id += 1
-            noticias.append({"ID": id,"Titulo": noticiaTitu ,"Descricao": noticiaDesc, "Noticia": noticiaComp, "DataDia": data_dia, "DataMes": data_mes, "DataAno": data_ano})
+            noticias.append({"ID": id,"Titulo": noticiaTitu ,"Descricao": noticiaDesc, "Noticia": noticiaComp, "DataDia": data_dia, "DataMes": data_mes, "DataAno": data_ano, "Comentarios": [], "Curtidas": 0})
             print("\nNoticia Enviada com Sucesso!\n")
 
         elif pgreporter == "2":
@@ -156,8 +153,9 @@ def leitorMenu():
         print("[1] Buscar notícia")
         print('[2] Comentar notícia')
         print('[3] Curtir notícia')
+        print('[4] Ver Noticias por ID')
         print('[0] Deslogar')
-        pgleitor = usuarioInput("\n")
+        pgleitor = input("\n")
         print("_" *50)
         if pgleitor == "0":
             main()
@@ -167,11 +165,9 @@ def leitorMenu():
             print('Programa Finalizado!')
             break
 
-        elif(pgleitor != '1' and pgleitor != '2' and pgleitor != '3' and pgleitor != '0'):
+        elif(pgleitor != '1' and pgleitor != '2' and pgleitor != '3' and pgleitor != '0' and pgleitor != '4'):
             print('\nInformação Inválida!')
-            print('=' * 30)
-            print('Responda com 1, 2, 3 ou 0')
-            print('=' * 30)
+            print('Responda com 1, 2, 3, 4 ou 0')
 
         elif(pgleitor == '1'):
             id_view_2 = int(input('\nDigite o ID da notícia que vc quer buscar: '))
@@ -179,7 +175,7 @@ def leitorMenu():
                 if noticia['ID'] == id_view_2:
                     print(
                         f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
-                        f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']} ")
+                        f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}\nComentários: {noticia['Comentarios']}\nCurtidas: {noticia['Curtidas']} ")
                     break
             else:
                 print("\nNoticia não encontrada.")
@@ -191,25 +187,29 @@ def leitorMenu():
                     print(f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
                           f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']} ")
                     comentario = input('\nDigite o comentário que você deseja adicionar: ')
-                    print('\nSeu comentário foi adicionado a notícia!')
-                    visualisar_comentario = input('Deseja vê o comentário adicionado? Responda com: s/n')
-                    if(visualisar_comentario == 's'):
-                        print(f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
-                              f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']} "
-                              f"\nCOMENTÁRIO: {comentario}")
-                    else:
-                        break
-            else:
-                print("\nNoticia não encontrada.")
+                    noticia['Comentarios'].append(comentario) ####################################################################
+                    print('\nSeu comentário foi adicionado a notícia!')   
+                else:
+                    print("\nNoticia não encontrada.")
 
         elif(pgleitor == '3'):
             curtida = int(input('Digite o ID da notícia que você deseja curtir: '))
             for noticia in noticias:
                 if noticia['ID'] == curtida:
+                    noticia['Curtidas'] += 1
                     print('\nSua curtida foi contabilizada!')
                 else:
                     print('Notícia não encontrada!')
                 break
+                
+        elif(pgleitor == '4'):
+            if noticias:
+                for noticia in noticias:
+                    print("_" *50)
+                    print(f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}")
+
+            else:
+                print("\nNenhuma noticia foi criada ainda.\n")
 
 def main():
     global tipo_usuario
@@ -219,11 +219,11 @@ def main():
         print("Escolha uma opçao para prosseguir\n")
         print("[1] Criar Conta")
         print("[2] Login")
-        print("[0] Sair")
-        pgmenu = usuarioInput("\n")
+        print("[0] sair")
+        pgmenu = input("")
         print("_" *50)
         if pgmenu == "0":
-            break
+            exit()
         elif pgmenu == "1":
             tipo_usuario = criarConta()
             if tipo_usuario.lower() == "r":
@@ -237,6 +237,5 @@ def main():
                 break
         else:
             print('\nInformação Inválida! Responda com 1, 2 ou 0')
-
 
 main()
