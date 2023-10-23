@@ -35,7 +35,7 @@ def criarConta():
                 print("\n\033[31mPara ser Reporter você precisa ter pelo menos 18 anos.\n\033[m")
                 main()
 
-        print(f"\n\033[32mUsuario {'Reporter' if tipo_usuario.lower == 'r' else 'Leitor'} cadastrado com Sucesso!\033[m")
+        print(f"\n\033[32mUsuario {'Reporter' if tipo_usuario.lower() == 'r' else 'Leitor'} cadastrado com Sucesso!\033[m")
         dados[user] = {'senha': senh, 'tipo': tipo_usuario}
         return tipo_usuario
 
