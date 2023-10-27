@@ -6,6 +6,8 @@ tipo_usuario = None
 idade = 0
 
 dados = {}
+dados['e'] = {'senha': '1', 'tipo': 'r'}  #USUÁRIOS PRÉ-CADASTRADOS PARA TESTES
+dados['r'] = {'senha': '1', 'tipo': 'l'}
 noticias = []
 id = 0
 
@@ -28,7 +30,6 @@ def criarConta():
         if tipo_usuario.lower() not in ["l", "r"]:
             print("\n\033[31mTipo de Usuario Invalido.\n\033[m")
             continue
-
         if tipo_usuario.lower() == "r":
             idade = int(input("\nDigite sua idade : "))
             if idade < 18:
@@ -42,20 +43,19 @@ def criarConta():
 def login():
     tent = 3
     for i in range(0, tent):
-        global tipo_usuario
+        #global tipo_usuario
         tent -= 1
         login1 = input("\nUsuario : ")
         senha1 = input("Senha : ")
-        if dados.get(login1) and dados.get(login1)['senha'] == senha1:
+        if (dados.get(login1)['senha'] == senha1) and (login1 in dados): #dados.get(login1) and 
             print(f"\n\033[32mBem Vindo ao APP Noticias da Catolica, {login1}!\033[m")
-            tipo_usuario = dados.get(login1)['tipo']
-            if tipo_usuario.lower() == "r":
+            if dados.get(login1)['tipo'] == "r":
                 if reporterMenu():
                     break
-            elif tipo_usuario.lower() == "l":
+            elif dados.get(login1)['tipo'] == "l":
                 if leitorMenu():
                     break
-        if tent > 0 and tent > 1:
+        if tent > 1:
             print(f"\n\033[31mUsuario ou Senha Incorretos. Você tem mais {tent} Tentativas.\033[m")
         elif tent == 1:
             print(f"\n\033[31mUsuario ou Senha Incorretos. Você tem mais {tent} Tentativa.\033[m")
@@ -67,13 +67,13 @@ def reporterMenu():
     global id
     while True:
         print("_" * 50)
-        print("\nEscolha uma opçao para prosseguir\n")
-        print("[1] Criar Noticias")
-        print("[2] Editar Noticias")
-        print("[3] Remover Noticias")
-        print("[4] Ver ID Noticias")
-        print("[5] Abrir Noticias")
-        print("[0] Deslogar")
+        print('''\nEscolha uma opçao para prosseguir:\n
+        [1] Criar Noticias
+        [2] Editar Noticias
+        [3] Remover Noticias
+        [4] Ver ID Noticias
+        [5] Abrir Noticias
+        [0] Deslogar''')
         pgreporter = input("\n")
         print("_" * 50)
         if pgreporter == "0":
@@ -86,23 +86,25 @@ def reporterMenu():
             noticiaComp = input("Digite a Noticia : ")
 
             print('Digite a Data: ')
-            data_dia = int(input("Dia: "))
-            data_mes = int(input('Mês: '))
-            data_ano = int(input('Ano: '))
             while True:
-                if (data_dia < 1) or (data_dia > 31) or (data_mes < 1) or (data_mes > 12) or (data_ano < 0):
-                    print('\n\033[31mData Inválida!\n\033[m')
-                    print('Digite novamente: ')
-                    data_dia = int(input("Dia: "))
+                try:
+                    data_dia = int(input('Dia: '))
                     data_mes = int(input('Mês: '))
                     data_ano = int(input('Ano: '))
-                else:
+                except ValueError:
+                    print('\033[31mDigite uma Data Válida.\n\033[m')
+                    continue
+                    
+                if (1 <= data_dia <= 31) and (1 <= data_mes <= 12) and (0 < data_ano <= 2023):
                     break
+                else:
+                    print('\n\033[31mData Inválida!\n\033[m')
+                    print('Digite novamente: ')
 
             id += 1
             noticias.append(
                 {"ID": id, "Titulo": noticiaTitu, "Descricao": noticiaDesc, "Noticia": noticiaComp, "DataDia": data_dia,
-                 "DataMes": data_mes, "DataAno": data_ano, "Comentarios": [], "Curtidas": 0})
+                "DataMes": data_mes, "DataAno": data_ano, "Comentarios": [], "Curtidas": 0})
             print("\n\033[32mNoticia Enviada com Sucesso!\n\033[m")
 
         elif pgreporter == "2":
@@ -158,12 +160,12 @@ def reporterMenu():
 def leitorMenu():
     while True:
         print("_" * 50)
-        print("\nEscolha uma opçao para prosseguir:\n")
-        print("[1] Buscar notícia")
-        print('[2] Comentar notícia')
-        print('[3] Curtir notícia')
-        print('[4] Ver Noticias por ID')
-        print('[0] Deslogar')
+        print('''\nEscolha uma opçao para prosseguir:\n
+        [1] Buscar notícia
+        [2] Comentar notícia
+        [3] Curtir notícia
+        [4] Ver Noticias por ID
+        [0] Deslogar''')
         pgleitor = input("\n")
         print("_" * 50)
         if pgleitor == "0":
@@ -217,7 +219,6 @@ def leitorMenu():
                     print("_" * 50)
                     print(
                         f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}")
-
             else:
                 print("\n\033[31menhuma noticia foi criada ainda.\n\033[m")
 
@@ -225,11 +226,11 @@ def main():
     global tipo_usuario
     while True:
         print("_" * 50)
-        print("\nBem vindo(a) ao APP de Noticias da Catolica")
-        print("Escolha uma opçao para prosseguir\n")
-        print("[1] Criar Conta")
-        print("[2] Login")
-        print("[0] sair")
+        print('''\nBem vindo(a) ao APP de Noticias da Catolica
+        Escolha uma opçao para prosseguir\n
+        [1] Criar Conta"
+        [2] Login"
+        [0] sair''')
         pgmenu = input("")
         print("_" * 50)
         if pgmenu == "0":
