@@ -6,8 +6,8 @@ tipo_usuario = None
 idade = 0
 
 dados = {}
-dados['e'] = {'senha': '1', 'tipo': 'r'}  #USUÁRIOS PRÉ-CADASTRADOS PARA TESTES
-dados['r'] = {'senha': '1', 'tipo': 'l'}
+dados['e'] = {'senha': '1', 'tipo': 'r', 'nome': 'TesteNome1'}  #USUÁRIOS PRÉ-CADASTRADOS PARA TESTES
+dados['r'] = {'senha': '1', 'tipo': 'l', 'nome': 'TesteNome2'}
 noticias = []
 
 def criarConta():
@@ -43,12 +43,12 @@ def criarConta():
                     main()
                 elif idade >= 18:
                     print(f"\n\033[32mUsuario Repórter cadastrado com Sucesso!\033[m")
-                    dados[user] = {'senha': senh, 'tipo': tipo_usuario}
+                    dados[user] = {'senha': senh, 'tipo': tipo_usuario, 'nome': nome}
                     log = True
                     break
             elif tipo_usuario.lower() == "l":
                 print(f"\n\033[32mUsuario Leitor cadastrado com Sucesso!\033[m")
-                dados[user] = {'senha': senh, 'tipo': tipo_usuario}
+                dados[user] = {'senha': senh, 'tipo': tipo_usuario, 'nome': nome}
                 log = True
                 break
             
@@ -64,7 +64,7 @@ def login():
         login1 = input("\nUsuario : ")
         senha1 = input("Senha : ")
         if (login1 in dados) and (senha1 in dados[login1]["senha"]):
-            print(f"\n\033[32mBem Vindo ao APP Noticias da Catolica, {login1}!\033[m")
+            print(f"\n\033[32mBem Vindo ao APP Noticias da Catolica, {dados[login1]['nome']}!\033[m")
             if dados[login1]['tipo'] == "r":
                 if reporterMenu():
                     break
@@ -110,7 +110,7 @@ def reporterMenu():
                 except ValueError:
                     print('\033[31mDigite uma Data Válida.\n\033[m')
                     continue
-                    
+                
                 if (1 <= data_dia <= 31) and (1 <= data_mes <= 12) and (0 < data_ano <= 2023):
                     break
                 else:
@@ -201,52 +201,81 @@ def leitorMenu():
         print("_" * 50)
 
         if (pgLeitor == '0'):
-            print('\033[32mPrograma Finalizado!\033[m')
+            main()
             break
 
         elif (pgLeitor == '1'):
-            try:
-                verId2 = int(input('\nDigite o ID da notícia que vc quer buscar: '))
-            except ValueError:
-                print("\n\033[31mNoticia não encontrada.\033[m")
-                continue
-            for noticia in noticias:
-                if noticia['ID'] == verId2:
-                    print(
-                        f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
-                        f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}")
-                    print('\nComentários: ')
-                    print(*noticia['Comentarios'], sep=", ")
-                    print(f"\nCurtidas: {noticia['Curtidas']} ")
-                    break
+            print("Digite\n"
+                  "1 Para procurar por ID\n"
+                  "2 Para procurar por Assunto\n")
+            pgL1 = str(input(""))
+            if pgL1 == "1":
+                try:
+                    verId2 = int(input('\nDigite o ID da notícia que vc quer buscar: '))
+                except ValueError:
+                    print("\n\033[31mID não encontrado.\033[m")
+                    continue
+                for noticia in noticias:
+                    if noticia['ID'] == verId2:
+                        print(
+                            f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
+                            f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}")
+                        print('\nComentários: ')
+                        print(*noticia['Comentarios'], sep=", ")
+                        print(f"\nCurtidas: {noticia['Curtidas']} ")
+                        break
+                else:
+                    print("\n\033[31mNoticia não encontrada.\033[m")
+            
+            elif pgL1 == "2":
+                try:
+                    verId3 = str(input('\nDigite o Assunto que vc quer buscar: '))
+                    print("_" * 50)
+                except ValueError:
+                    print("\n\033[31mAssunto não encontrado.\033[m")
+                    continue
+                for noticia in noticias:
+                    if verId3 in noticia['Noticia']:
+                        print(
+                            f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
+                            f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}")
+                        print('\nComentários: ')
+                        print(*noticia['Comentarios'], sep=", ")
+                        print(f"\nCurtidas: {noticia['Curtidas']} ")
+                        print("_" * 50)
+                    else:
+                        None
             else:
-                print("\n\033[31mNoticia não encontrada.\033[m")
+                print("\n\033[31mOpcao Invalida.\033[m")
 
         elif (pgLeitor == '2'):
+            comentario = False
             try:
                 busca = int(input('Digite o ID da notícia que você deseja comentar: '))
             except ValueError:
-                print("\n\033[31mNoticia não encontrada.\033[m")
+                print("\n\033[31mID não encontrado.\033[m")
                 continue
             for noticia in noticias:
                 if noticia['ID'] == busca:
-                    comentario = input('\nDigite o comentário que você deseja adicionar: ')
+                    comentario = str(input('\nDigite o comentário que você deseja adicionar: '))
                     noticia['Comentarios'].append(comentario)
                     print('\n\033[32mSeu comentário foi adicionado a notícia!\033[m')
-                else:
+                    comentario = True
+                    break
+                if not comentario:
                     print("\n\033[31mNoticia não encontrada.\033[m")
 
         elif (pgLeitor == '3'):
             try:
                 curtida = int(input('Digite o ID da notícia que você deseja curtir: '))
             except ValueError:
-                print('\n\033[31mNotícia não encontrada!\033[m')
+                print("\n\033[31mID não encontrado.\033[m")
                 continue
             for noticia in noticias:
                 if noticia['ID'] == curtida:
                     noticia['Curtidas'] += 1
                     print('\n\033[32mSua curtida foi contabilizada!\033[m')
-                else:
+                elif noticia['ID'] not in curtida:
                     print('\n\033[31mNotícia não encontrada!\033[m')
                 break
 
@@ -261,6 +290,7 @@ def leitorMenu():
 
         else:
             print('\n\033[31mInformação Inválida! \nResponda com 1, 2, 3, 4 ou 0\033[m')
+
 def main():
     global tipo_usuario
     while True:
@@ -275,13 +305,13 @@ def main():
         if pgMenu == "0":
             exit()
         elif pgMenu == "1":
-            tipo_usuario = criarConta()
-            if tipo_usuario.lower() == "r":
+            criarConta()
+            '''if tipo_usuario.lower() == "r":
                 if reporterMenu():
                     break
             elif tipo_usuario.lower() == "l":
                 if leitorMenu():
-                    break
+                    break'''
         elif pgMenu == "2":
             if login():
                 break
