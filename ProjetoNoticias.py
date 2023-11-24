@@ -1,43 +1,49 @@
 #EMILTON PEREIRA MARQUES NETO         P1 C.C. NOITE         2023
 
+from datetime import datetime
+
+current_date = datetime.now().date()
+formatted_date = current_date.strftime('%d/%m/%Y')
+data = formatted_date
+
+id = 1
+idade = 0
 logado = False
 tipo_usuario = None
-idade = 0
 usuario_logado = None
-id = 1
+
 dados = {}
-dados['e'] = {'senha': '1', 'tipo': 'r', 'nome': 'TesteNome1'}  # USUÁRIOS PRÉ-CADASTRADOS PARA TESTES
-dados['r'] = {'senha': '1', 'tipo': 'l', 'nome': 'TesteNome2'}
 noticias = []
-noticias.append({
+
+dados['e'] = {'senha': '1', 'tipo': 'r', 'nome': 'TesteNome1'}  # USUÁRIOS PRÉ-CADASTRADOS
+dados['r'] = {'senha': '1', 'tipo': 'l', 'nome': 'TesteNome2'}
+dados['emi'] = {'senha': '1', 'tipo': 'r', 'nome': 'Emilton2'}
+
+noticias.append({ # NOTÍCIAS PRÉ CADASTRADAS
    "ID": 0,
    "Titulo": "Descoberta Científica",
    "Descricao": "Novo tratamento inovador...",
    "Noticia": "Em um avanço notável para a pesquisa médica, cientistas de renome apresentaram hoje um tratamento promissor que pode representar uma virada significativa no campo das doenças neurodegenerativas. Este anúncio surge como uma luz de esperança para milhões de pessoas em todo o mundo que sofrem de condições como Alzheimer, Parkinson e Esclerose Múltipla."
    "A pesquisa, liderada por uma equipe internacional de especialistas em neurociência, concentrou-se no desenvolvimento de terapias inovadoras que visam abordar as causas subjacentes dessas doenças debilitantes, em vez de apenas aliviar os sintomas. Os resultados preliminares indicam um notável sucesso no tratamento, oferecendo uma perspectiva encorajadora para o futuro.",
-   "DataDia": 20,
-   "DataMes": 11,
-   "DataAno": 2023,
+   "Data": "23/11/2023",
    "Autor": "a",
    "Comentarios": ["Empolgante notícia! A esperança de avanços no tratamento de doenças neurodegenerativas é uma luz no fim do túnel para milhões de pessoas em todo o mundo.",
                     "A ciência continua a desafiar os limites, oferecendo perspectivas promissoras para um futuro com menos sofrimento. Parabéns aos cientistas por esse progresso inspirador!"],
    "Curtidas": 23
    
 })
-
 noticias.append({
    "ID": 1,
    "Titulo": "Titulo blabla",
    "Descricao": "Descricao blabla",
    "Noticia": "Noticia blablablablablablablablablablablabla",
-   "DataDia": 21,
-   "DataMes": 11,
-   "DataAno": 2023,
+   "Data": "23/11/2023",
    "Autor": "e",
    "Comentarios": ['Massa'],
    "Curtidas": 25
    
 })
+
 
 def criarConta():
     while True:
@@ -94,7 +100,7 @@ def login():
         tent -= 1
         login1 = input("\nUsuario : ")
         senha1 = input("Senha : ")
-        if (login1 in dados) and (senha1 in dados[login1]["senha"]):
+        if (login1 in dados) and (senha1 == dados[login1]["senha"]):
             print(f"\n\033[32mBem Vindo ao APP Noticias da Catolica, {dados[login1]['nome']}!\033[m")
             usuario_logado = login1
             if dados[login1]['tipo'] == "r":
@@ -113,6 +119,7 @@ def login():
 
 
 def reporterMenu():
+    global data
     global id
     while True:
         print("_" * 50)
@@ -136,26 +143,9 @@ def reporterMenu():
             noticiaDesc = input("Digite a Descricao : ")
             noticiaComp = input("Digite a Noticia : ")
 
-            print('Digite a Data: ')
-            while True:
-                try:
-                    data_dia = int(input('Dia: '))
-                    data_mes = int(input('Mês: '))
-                    data_ano = int(input('Ano: '))
-                except ValueError:
-                    print('\033[31mDigite uma Data Válida.\n\033[m')
-                    continue
-
-                if (1 <= data_dia <= 31) and (1 <= data_mes <= 12) and (0 < data_ano <= 2023):
-                    break
-                else:
-                    print('\n\033[31mData Inválida!\n\033[m')
-                    print('Digite novamente: ')
-
             id += 1
             noticias.append(
-                {"ID": id, "Titulo": noticiaTitu, "Descricao": noticiaDesc, "Noticia": noticiaComp, "DataDia": data_dia,
-                "DataMes": data_mes, "DataAno": data_ano, "Comentarios": [], "Curtidas": 0, "Autor": usuario_logado})
+                {"ID": id, "Titulo": noticiaTitu, "Descricao": noticiaDesc, "Noticia": noticiaComp, "Data": data,"Comentarios": [], "Curtidas": 0, "Autor": usuario_logado})
             print("\n\033[32mNoticia Enviada com Sucesso!\n\033[m")
 
         elif pgReporter == "2":
@@ -176,28 +166,14 @@ def reporterMenu():
                             noticia['Titulo'] = input("Digite o novo titulo: ")
                             noticia['Descricao'] = input("Digite a nova descricao: ")
                             noticia['Noticia'] = input("Digite a nova noticia: ")
-                            while True:
-                                try:
-                                    noticia['DataDia'] = int(input('Dia: '))
-                                    noticia['DataMes'] = int(input('Mês: '))
-                                    noticia['DataAno'] = int(input('Ano: '))
-                                except ValueError:
-                                    print('\033[31mDigite uma Data Válida.\n\033[m')
-                                    continue
-
-                                if (1 <= noticia['DataDia'] <= 31) and (1 <= noticia['DataMes'] <= 12) and (0 < noticia['DataAno'] <= 2023):
-                                    break
-                                else:
-                                    print('\n\033[31mData Inválida!\n\033[m')
-                                    print('Digite novamente: ')
+                            data = formatted_date
                             print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                             break
                         elif resposta.lower() == 'n':
                             print('\nQual parte da notícia deseja editar?\n'
                                   '[1] - Título\n'
                                   '[2] - Descrição\n'
-                                  '[3] - Notícia\n'
-                                  '[4] - Data\n')
+                                  '[3] - Notícia\n')
                             resp_02 = input('')
                             if resp_02 == '1':
                                 noticia['Titulo'] = input("Digite o novo titulo: ")
@@ -211,23 +187,7 @@ def reporterMenu():
                                 noticia['Noticia'] = input("Digite a nova noticia: ")
                                 print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                                 break
-                            elif resp_02 == '4':
-                                while True:
-                                    try:
-                                        noticia['DataDia'] = int(input('Dia: '))
-                                        noticia['DataMes'] = int(input('Mês: '))
-                                        noticia['DataAno'] = int(input('Ano: '))
-                                    except ValueError:
-                                        print('\033[31mDigite uma Data Válida.\n\033[m')
-                                        continue
-
-                                    if (1 <= noticia['DataDia'] <= 31) and (1 <= noticia['DataMes'] <= 12) and (0 < noticia['DataAno'] <= 2023):
-                                        break
-                                    else:
-                                        print('\n\033[31mData Inválida!\n\033[m')
-                                        print('Digite novamente: ')
-                                print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
-                                break
+                                
                         else:
                             print('\n\033[31mResposta Inválida!\n\033[m')
                 #else:
@@ -260,7 +220,7 @@ def reporterMenu():
                 for noticia in noticias:
                      if noticia['Autor'] == usuario_logado:
                         print("_" * 50)
-                        print(f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}")
+                        print(f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['Data']}")
 
             else:
                 print("\n\033[31mNenhuma noticia foi criada ainda.\n\033[m")
@@ -278,7 +238,7 @@ def reporterMenu():
                         continue
                     print("_" * 50)
                     print(
-                        f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']} ")
+                        f"\nID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: {noticia['Data']}\nNoticia: {noticia['Noticia']} ")
                     print("\nComentários:")
                     print(*noticia["Comentarios"], sep="\n")
                     print(f"\nCurtidas: {noticia['Curtidas']} ")
@@ -307,11 +267,14 @@ def reporterMenu():
 
         elif pgReporter == "7":
             minhas_noticias = [noticia for noticia in noticias if noticia['Autor'] == usuario_logado]
-            with open(f'{usuario_logado}_noticias.txt', 'w') as arquivo:
+            with open(f'{dados[usuario_logado]['nome']}_noticias.txt', 'w') as arquivo:
                 for noticia in minhas_noticias:
-                    arquivo.write(f"ID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nNoticia: {noticia['Noticia']}\nData: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nComentários: {noticia['Comentarios']}\nCurtidas: {noticia['Curtidas']}\n\n")
-            print("\n\033[32mNotícias baixadas com sucesso!\n\033[m")
+                    arquivo.write(f"ID: {noticia['ID']}\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nNoticia: {noticia['Noticia']}\nData: {noticia['Data']}\nComentários: {noticia['Comentarios']}\nCurtidas: {noticia['Curtidas']}\n\n")
+            if len(minhas_noticias) < 1:
+                print('\n\033[31mVocê não possui Notícias!\033[m')
+                continue
 
+            print("\n\033[32mNotícias baixadas com sucesso!\033[m")
         else:
             print('\n\033[31mInformação Inválida! \nResponda com 1, 2, 3, 4, 5, 6, 7 ou 0\033[m')
 
@@ -348,7 +311,7 @@ def leitorMenu():
                     if noticia['ID'] == verId2:
                         print(
                             f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
-                            f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}")
+                            f"{noticia['Data']}\nNoticia: {noticia['Noticia']}")
                         print('\nComentários: ')
                         print(*noticia['Comentarios'], sep=", ")
                         print(f"\nCurtidas: {noticia['Curtidas']} ")
@@ -367,8 +330,8 @@ def leitorMenu():
                 for noticia in noticias:
                     if verId3 in noticia['Noticia']:
                         print(
-                            f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
-                            f"{noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}\nNoticia: {noticia['Noticia']}")
+                            f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\n"
+                            f"Data: {noticia['Data']}\nNoticia: {noticia['Noticia']}")
                         print('\nComentários: ')
                         print(*noticia['Comentarios'], sep="\n")
                         print(f"\nCurtidas: {noticia['Curtidas']} ")
@@ -419,7 +382,7 @@ def leitorMenu():
                 for noticia in noticias:
                     print("_" * 50)
                     print(
-                        f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}")
+                        f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['Data']}")
             else:
                 print("\n\033[31menhuma noticia foi criada ainda.\n\033[m")
 
@@ -438,7 +401,7 @@ def leitorMenu():
                     if noticia['ID'] == id:
                         print("_" * 100)
                         print(
-                            f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}   Curtidas: {noticia['Curtidas']}")
+                            f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['Data']}   Curtidas: {noticia['Curtidas']}")
 
         else:
             print('\n\033[31mInformação Inválida! \nResponda com 1, 2, 3, 4, 5 ou 0\033[m')
@@ -456,6 +419,7 @@ def main():
         pgMenu = input("")
         print("_" * 50)
         if pgMenu == "0":
+            print('\n\033[31mPrograma Finalizado\033[m')
             usuario_logado = None
             exit()
         elif pgMenu == "1":
