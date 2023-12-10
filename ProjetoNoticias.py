@@ -26,7 +26,7 @@ noticias.append({ # NOTÍCIAS PRÉ CADASTRADAS
    "Noticia": "Em um avanço notável para a pesquisa médica, cientistas de renome apresentaram hoje um tratamento promissor que pode representar uma virada significativa no campo das doenças neurodegenerativas. Este anúncio surge como uma luz de esperança para milhões de pessoas em todo o mundo que sofrem de condições como Alzheimer, Parkinson e Esclerose Múltipla."
    "A pesquisa, liderada por uma equipe internacional de especialistas em neurociência, concentrou-se no desenvolvimento de terapias inovadoras que visam abordar as causas subjacentes dessas doenças debilitantes, em vez de apenas aliviar os sintomas. Os resultados preliminares indicam um notável sucesso no tratamento, oferecendo uma perspectiva encorajadora para o futuro.",
    "Data": "23/11/2023",
-   "Autor": "a",
+   "Autor": "emi",
    "Comentarios": ["Empolgante notícia! A esperança de avanços no tratamento de doenças neurodegenerativas é uma luz no fim do túnel para milhões de pessoas em todo o mundo.",
                     "A ciência continua a desafiar os limites, oferecendo perspectivas promissoras para um futuro com menos sofrimento. Parabéns aos cientistas por esse progresso inspirador!"],
    "Curtidas": 23
@@ -50,6 +50,9 @@ def criarConta():
         nome = str(input("\nDigite seu nome : "))
         while True:
             user = input("Usuario : ")
+            if len(user) < 1:
+                print("\n\033[31mDigite um username valido.\n\033[m")
+                continue
             if user in dados:
                 print("\n\033[31mEsse nome de Usuario ja existe.\n\033[m")
             else:
@@ -124,11 +127,11 @@ def reporterMenu():
     while True:
         print("_" * 50)
         print('''\nEscolha uma opçao para prosseguir:\n
-        [1] Criar Noticias
-        [2] Editar Noticias
-        [3] Remover Noticias
-        [4] Ver ID Noticias
-        [5] Abrir Noticias
+        [1] Criar Noticia
+        [2] Editar Noticia
+        [3] Remover Noticia
+        [4] Ver ID das Minhas Noticias
+        [5] Abrir Minhas Noticias
         [6] Minhas Noticias Populares
         [7] Baixar Minhas Noticias
         [0] Deslogar''')
@@ -263,7 +266,7 @@ def reporterMenu():
                     if noticia['ID'] == id:
                         print("_" * 100)
                         print(
-                            f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['DataDia']}/{noticia['DataMes']}/{noticia['DataAno']}   Curtidas: {noticia['Curtidas']}")
+                            f"\nID: {noticia['ID']}   Titulo: {noticia['Titulo']}   Descricao: {noticia['Descricao']}   Data: {noticia['Data']}   Curtidas: {noticia['Curtidas']}")
 
         elif pgReporter == "7":
             minhas_noticias = [noticia for noticia in noticias if noticia['Autor'] == usuario_logado]
@@ -284,8 +287,8 @@ def leitorMenu():
         print("_" * 50)
         print('''\nEscolha uma opçao para prosseguir:\n
         [1] Buscar notícia
-        [2] Comentar notícia
-        [3] Curtir notícia
+        [2] Comentar na notícia
+        [3] Curtir uma notícia
         [4] Ver Noticias por ID
         [5] Notícias Populares
         [0] Deslogar''')
