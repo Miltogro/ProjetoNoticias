@@ -2,9 +2,8 @@
 
 from datetime import datetime
 
-current_date = datetime.now().date()
-formatted_date = current_date.strftime('%d/%m/%Y')
-data = formatted_date
+data_atual = datetime.now().date()
+data = data_atual.strftime('%d/%m/%Y')
 
 id = 1
 idade = 0
@@ -316,7 +315,7 @@ def leitorMenu():
                             f"\nTitulo: {noticia['Titulo']}\nDescricao: {noticia['Descricao']}\nData: "
                             f"{noticia['Data']}\nNoticia: {noticia['Noticia']}")
                         print('\nComentários: ')
-                        print(*noticia['Comentarios'], sep=", ")
+                        print(*noticia['Comentarios'], sep="\n")
                         print(f"\nCurtidas: {noticia['Curtidas']} ")
                         break
                 else:
