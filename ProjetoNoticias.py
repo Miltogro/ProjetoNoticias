@@ -75,7 +75,11 @@ def criarConta():
             if tipo_usuario.lower() not in ["l", "r"]:
                 print("\n\033[31mTipo de Usuario Invalido.\n\033[m")
             if tipo_usuario.lower() == "r":
-                idade = int(input("\nDigite sua idade : "))
+                try:
+                    idade = int(input("\nDigite sua idade : "))
+                except ValueError:
+                    print("\n\033[31mDigite uma idade válida\n\033[m")
+                    continue
                 if idade < 18:
                     print("\n\033[31mPara ser Reporter você precisa ter pelo menos 18 anos.\n\033[m")
                     main()
@@ -168,7 +172,6 @@ def reporterMenu():
                             noticia['Titulo'] = input("Digite o novo titulo: ")
                             noticia['Descricao'] = input("Digite a nova descricao: ")
                             noticia['Noticia'] = input("Digite a nova noticia: ")
-                            data = formatted_date
                             print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                             break
                         elif resposta.lower() == 'n':
@@ -176,24 +179,22 @@ def reporterMenu():
                                   '[1] - Título\n'
                                   '[2] - Descrição\n'
                                   '[3] - Notícia\n')
-                            resp_02 = input('')
-                            if resp_02 == '1':
+                            querEditar = input('')
+                            if querEditar == '1':
                                 noticia['Titulo'] = input("Digite o novo titulo: ")
                                 print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                                 break
-                            elif resp_02 == '2':
+                            elif querEditar == '2':
                                 noticia['Descricao'] = input("Digite a nova descricao: ")
                                 print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                                 break
-                            elif resp_02 == '3':
+                            elif querEditar == '3':
                                 noticia['Noticia'] = input("Digite a nova noticia: ")
                                 print("\n\033[32mNoticia atualizada com sucesso!\n\033[m")
                                 break
                                 
                         else:
                             print('\n\033[31mResposta Inválida!\n\033[m')
-                #else:
-                #    print("\n\033[31mNoticia não encontrada.\n\033[m")
 
         elif pgReporter == "3":
             try:
